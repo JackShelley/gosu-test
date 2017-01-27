@@ -9,18 +9,26 @@ class Game < Gosu::Window
 		self.caption = "Ruby RPG"
 
 		@backdrop = Backdrop.new(self)
-		@player1 = Player.new(self, "Ryu", false)
+		@player1 = Player.new(self, "witch", false)
+		@player2 = Player.new(self, "wizard", false)
+
+		@text = TextBox.new(self, 'I am the greate Slagathor Merrysmith Tomnook Riverbrandy the Wizard. Fight me.')
+
 		@action_flag = false
 		@current_action = @idle
 		@frame_counter = 1
   	@large_font = Gosu::Font.new(self, "Alagard", @screen_height / 12)
+  	@medium_font = Gosu::Font.new(self, "Alagard", @screen_height / 20)
 	end
 
 	def draw
 		@backdrop.draw
 		@player1.draw
+		draw_text(0, 0, "#{@player1.pos_x}, #{@player1.pos_y}", @medium_font, 0xff_ffffffd1000)
+		@player2.draw
     draw_text(@screen_width/2-@screen_width/4, 75, "Select Character", @large_font, 0xff_ffffff)
-    draw_text(650, 170, "Computer Choice", @large_font, 0xff_fffff0f)
+
+    @text.draw
 	end
 
 	def button_down (id)
@@ -51,8 +59,19 @@ class Game < Gosu::Window
 			@player1.move_left
 		  elsif button_down? char_to_button_id("d")
 			@player1.move_right
+			elsif button_down?char_to_button_id("i")
+			@player2.move_up
+		  elsif button_down? char_to_button_id("k")
+			@player2.move_down
+		  elsif button_down? char_to_button_id("j")
+			@player2.move_left
+		  elsif button_down? char_to_button_id("l")
+			@player2.move_right
+			elsif button_down? char_to_button_id("t")
+			@text.update_text
 		  else 
 		 	@player1.idle
+		 	@player2.idle
 		 end
 		end
 
