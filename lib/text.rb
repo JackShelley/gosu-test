@@ -14,7 +14,7 @@ class TextBox < Gosu::Image
     @large_font = Gosu::Font.new(@window, "Alagard", 25)
     @output = []
     @counter = 0
-    @showing = true
+    @showing = false
   end
 
   def reformat_wrapped(s, width=45)

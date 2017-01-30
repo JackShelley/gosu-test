@@ -57,6 +57,7 @@ class Player
 		if @pos_x > -100
 			@pos_x -= SPEED
 		elsif @pos_x < -60
+			$backdrop.change_stage('left')
 			@pos_x = @window.width
 		else
 			@pos_x += 0
@@ -66,6 +67,7 @@ class Player
 	def move_up
 		@action = @up
 		if @pos_y < -110
+			$backdrop.change_stage('up')
 			@pos_y = 500
 		else
 			@pos_y -= SPEED
@@ -77,6 +79,7 @@ class Player
 		if @pos_y < 500
 			@pos_y += SPEED
 		elsif @pos_y >= 500
+			p$backdrop.change_stage('down')
 			@pos_y = -100
 		else
 			@pos_y += 0
@@ -88,6 +91,7 @@ class Player
 		if @pos_x < @window.width
 			@pos_x += SPEED
 		elsif @pos_x >= @window.width
+			$backdrop.change_stage('right')
 			@pos_x = -100
 		else
 			@pos_x += 0
