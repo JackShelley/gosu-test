@@ -8,8 +8,6 @@ class Player
 
 	def initialize(window, name, flip=false)
 		@window = window
-	puts "Creating new #{name}"
-
 
 		if name == 'witch'
 			@idle = Gosu::Image.load_tiles(window, 'assets/witch/down.png', 32, 32, false)[0..1]
@@ -42,7 +40,21 @@ class Player
 		@pos_y = 150	
 		@flip = flip
 		@max_x = window.width
-	end
+  end
+
+  def define_operation(operation)
+  	p operation
+
+  	if operation == 'down y'
+  		return @pos_y += 1
+  	elsif operation == 'up y'
+  		return @pos_y -= 1
+  	elsif operation == 'down x'
+  		return @pos_x -= 1
+  	elsif operation == 'up x'
+  		return @pos_x += 1
+  	end
+  end
 
 	def move_to(x)
 		@pos_x = x
@@ -52,49 +64,76 @@ class Player
 		@image.width * SCALE
 	end
 
-	def move_left
-		@action = @left
-		if @pos_x > -100
-			@pos_x -= SPEED
-		elsif @pos_x < -60
-			$backdrop.change_stage('left')
-			@pos_x = @window.width
-		else
-			@pos_x += 0
-		end
-	end
 
 	def move_up
 		@action = @up
-		if @pos_y < -110
-			$backdrop.change_stage('up')
-			@pos_y = 500
+
+		check = check_passability('11', @pos_x, @pos_y, 170, 110, 380, 210)		
+		if !check[0]		
+			if @pos_y < -100
+				$backdrop.change_stage('up')
+				@pos_y = 500
+			else
+				@pos_y -= SPEED
+			end
 		else
-			@pos_y -= SPEED
+			define_operation(check[1])
 		end
 	end	
 
 	def move_down
 		@action = @down
-		if @pos_y < 500
-			@pos_y += SPEED
-		elsif @pos_y >= 500
-			p$backdrop.change_stage('down')
-			@pos_y = -100
+
+		check = check_passability('11', @pos_x, @pos_y, 170, 110, 380, 200)
+		if !check[0] 
+			if @pos_y < 500
+				@pos_y += SPEED
+			elsif @pos_y >= 500
+				$backdrop.change_stage('down')
+				@pos_y = -100
+			else
+				@pos_y += 0
+			end
 		else
-			@pos_y += 0
+			define_operation(check[1])
 		end
 	end
 
+	def move_left
+		@action = @left
+
+		check = check_passability('11', @pos_x, @pos_y, 170, 110, 380, 200)
+		if !check[0]
+			if @pos_x > -100
+				@pos_x -= SPEED
+			elsif @pos_x < -60
+				$backdrop.change_stage('left')
+				@pos_x = @window.width
+			else
+				@pos_x += 0
+			end
+		else
+			define_operation(check[1])
+		end
+	end
+
+
 	def move_right
 		@action = @right
-		if @pos_x < @window.width
-			@pos_x += SPEED
-		elsif @pos_x >= @window.width
-			$backdrop.change_stage('right')
-			@pos_x = -100
+
+		check = check_passability('11', @pos_x, @pos_y, 170, 110, 380, 200)
+
+		if !check[0]
+			if @pos_x < @window.width 
+				@pos_x += SPEED
+			elsif @pos_x >= @window.width
+				$backdrop.change_stage('right')
+				@pos_x = -100
+			else
+				@pos_x += 0
+			end
 		else
-			@pos_x += 0
+			define_operation(check[1])
 		end
 	end
 

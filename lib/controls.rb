@@ -1,14 +1,11 @@
 # require 'gosu'
 
-# class Controls
+# module Controls
 # 	PLAYER1 = {
 # 		'a' => :left,
-# 		'd' => :right
-# 	}
-
-# 	PLAYER2 = {
-# 		'k' => :left,
-# 		';' => :right
+# 		'd' => :right,
+#     'w' => :up,
+#     's' => :down
 # 	}
 
 # 	def initialize(window, player, num)
