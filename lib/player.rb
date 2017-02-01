@@ -40,11 +40,11 @@ class Player
 		@pos_y = 150	
 		@flip = flip
 		@max_x = window.width
+
+		@boundaries = [Boundary.new('11', 170, 110, 380, 210),Boundary.new('11', -20, -20, 50, 50)]
   end
 
   def define_operation(operation)
-  	p operation
-
   	if operation == 'down y'
   		return @pos_y += 1
   	elsif operation == 'up y'
@@ -68,8 +68,18 @@ class Player
 	def move_up
 		@action = @up
 
-		check = check_passability('11', @pos_x, @pos_y, 170, 110, 380, 210)		
-		if !check[0]		
+		stop = false
+		direction = nil
+
+		@boundaries.each do |boundary|
+			check = boundary.check_passability(@pos_x, @pos_y)
+			if check[0] == true
+				stop = true
+				direction = check[1]
+			end
+		end
+
+		if !stop	
 			if @pos_y < -100
 				$backdrop.change_stage('up')
 				@pos_y = 500
@@ -77,15 +87,25 @@ class Player
 				@pos_y -= SPEED
 			end
 		else
-			define_operation(check[1])
+			define_operation(direction)
 		end
 	end	
 
 	def move_down
 		@action = @down
 
-		check = check_passability('11', @pos_x, @pos_y, 170, 110, 380, 200)
-		if !check[0] 
+		stop = false
+		direction = nil
+
+		@boundaries.each do |boundary|
+			check = boundary.check_passability(@pos_x, @pos_y)
+			if check[0] == true
+				stop = true
+				direction = check[1]
+			end
+		end
+
+		if !stop 
 			if @pos_y < 500
 				@pos_y += SPEED
 			elsif @pos_y >= 500
@@ -95,15 +115,24 @@ class Player
 				@pos_y += 0
 			end
 		else
-			define_operation(check[1])
+			define_operation(direction)
 		end
 	end
 
 	def move_left
 		@action = @left
+		stop = false
+		direction = nil
 
-		check = check_passability('11', @pos_x, @pos_y, 170, 110, 380, 200)
-		if !check[0]
+		@boundaries.each do |boundary|
+			check = boundary.check_passability(@pos_x, @pos_y)
+			if check[0] == true
+				stop = true
+				direction = check[1]
+			end
+		end
+
+		if !stop
 			if @pos_x > -100
 				@pos_x -= SPEED
 			elsif @pos_x < -60
@@ -113,17 +142,25 @@ class Player
 				@pos_x += 0
 			end
 		else
-			define_operation(check[1])
+			define_operation(direction)
 		end
 	end
 
 
 	def move_right
 		@action = @right
+		stop = false
+		direction = nil
 
-		check = check_passability('11', @pos_x, @pos_y, 170, 110, 380, 200)
+		@boundaries.each do |boundary|
+			check = boundary.check_passability(@pos_x, @pos_y)
+			if check[0] == true
+				stop = true
+				direction = check[1]
+			end
+		end
 
-		if !check[0]
+		if !stop
 			if @pos_x < @window.width 
 				@pos_x += SPEED
 			elsif @pos_x >= @window.width
@@ -133,7 +170,7 @@ class Player
 				@pos_x += 0
 			end
 		else
-			define_operation(check[1])
+			define_operation(direction)
 		end
 	end
 
