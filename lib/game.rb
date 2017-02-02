@@ -10,11 +10,9 @@ class Game < Gosu::Window
 		@thing = false
 		$backdrop = Backdrop.new(self)
 		@player1 = Player.new(self, "witch", false)
-		# @player2 = Player.new(self, "wizard", false)
-		@map = Map.new(self
-			)
+		@map = Map.new(self)
 		@text = TextBox.new(self, 'Wizard' , 'I am the great Slagathor Merrysmith Tomnook R-iverbrandy the Wizard. Fight me. FIGHT ME FIGHT ME FIGHT ME FIGHT ME FIGHT ME FIGHT...', 75, 400)
-
+		@bolt = Projectile.new(self)
 		@frame_counter = 0
   	@large_font = Gosu::Font.new(self, "Alagard", @screen_height / 12)
   	@medium_font = Gosu::Font.new(self, "Alagard", @screen_height / 20)
@@ -24,11 +22,11 @@ class Game < Gosu::Window
 		$backdrop.draw
 		@player1.draw
 		draw_text(0, 0, "#{@player1.pos_x}, #{@player1.pos_y}", @medium_font, 0xff_ffffffd1000)
-		# @player2.draw
 		@map.draw
     if @text.showing?
     	@text.draw
     end
+    @bolt.draw([@player1.pos_x, @player1.pos_y])
 	end
 
 	def button_down (id)
@@ -53,14 +51,6 @@ class Game < Gosu::Window
 		@player1.move_left
 	  elsif button_down? char_to_button_id("d")
 		@player1.move_right
-		elsif button_down?char_to_button_id("i")
-		# @player2.move_up
-	  elsif button_down? char_to_button_id("k")
-		# @player2.move_down
-	  elsif button_down? char_to_button_id("j")
-		# @player2.move_left
-	  elsif button_down? char_to_button_id("l")
-		# @player2.move_right
 		elsif button_down? char_to_button_id("t")
 			if in_range?(@player1, (100..200), (100..200))
 				@text.show
@@ -68,7 +58,10 @@ class Game < Gosu::Window
 			end
 	  else 
 	 	@player1.idle
-	 	# @player2.idle
+	 end
+
+	 if button_down? char_to_button_id("f")
+		 @bolt.fire
 	 end
 
 	 if !in_range?(@player1, (100..200), (100..200))
