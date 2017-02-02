@@ -14,7 +14,7 @@ class Boundary < Gosu::Image
     square = create_area(@x, @y, @lengthx, @lengthy)
     midpoint = [median(square[0]),median(square[1])]
 
-    if square[0].include?(player_x) && square[1].include?(player_y) && @stage == $stage
+    if square[0].include?(player_x) && square[1].include?(player_y)
       boolean = true
     else
       boolean = false
@@ -26,10 +26,8 @@ class Boundary < Gosu::Image
         return [boolean, 'down y']
     else
       if player_x < midpoint[0]
-        p 'down x'
         return [boolean, 'down x']
-      else
-        p 'up x'      
+      else    
         return [boolean, 'up x']
       end
     end
