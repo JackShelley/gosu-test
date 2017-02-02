@@ -4,7 +4,7 @@ class Player
 	attr_accessor :pos_x, :pos_y, :image, :frame
 
 	SCALE = 2.55
-	SPEED = 10
+	SPEED = 4
 
 	def initialize(window, name, flip=false)
 		@window = window
@@ -17,11 +17,27 @@ class Player
 			@right = Gosu::Image.load_tiles(window, 'assets/witch/right.png', 32, 32, false)[0..3]
 			@up = Gosu::Image.load_tiles(window, 'assets/witch/up.png', 32, 32, false)[0..3]
 			@down = Gosu::Image.load_tiles(window, 'assets/witch/down.png', 32, 32, false)[0..3]
+
+
+			@left_idle = Gosu::Image.load_tiles(window, 'assets/witch/left.png', 31, 31, false)[0..1]
+			2.times {|x|@left_idle.insert(0, @left_idle.first)}
+			2.times {@left_idle.insert(-1, @left_idle.last)}
+			@right_idle = Gosu::Image.load_tiles(window, 'assets/witch/right.png', 32, 32, false)[0..1]
+			2.times {|x|@right_idle.insert(0, @right_idle.first)}
+			2.times {@right_idle.insert(-1, @right_idle.last)}
+			@up_idle = Gosu::Image.load_tiles(window, 'assets/witch/up.png', 32, 32, false)[0..1]
+			2.times {|x|@up_idle.insert(0, @up_idle.first)}
+			2.times {@up_idle.insert(-1, @up_idle.last)}
+			@down_idle = Gosu::Image.load_tiles(window, 'assets/witch/down.png', 32, 32, false)[0..1]
+			2.times {|x|@down_idle.insert(0, @down_idle.first)}
+			2.times {@down_idle.insert(-1, @down_idle.last)}
+
 		elsif name == 'wizard'
 			@idle = (1...8).map do |i|
 				(1..4).include?(i) ? (x = 1) : (x =2)
 				Gosu::Image.new(window, "assets/wizard/forward#{x}.png", false)
 			end
+
 			@down = (1...3).map do |i|
 				Gosu::Image.new(window, "assets/wizard/forward#{i}.png", false)
 			end
@@ -109,6 +125,7 @@ class Player
 
 
 	def move_up
+		@idle = @up_idle
 		@action = @up
 
 		stop = false
@@ -136,6 +153,7 @@ class Player
 	end	
 
 	def move_down
+		@idle = @down_idle
 		@action = @down
 
 		stop = false
@@ -165,6 +183,7 @@ class Player
 	end
 
 	def move_left
+		@idle = @left_idle
 		@action = @left
 		stop = false
 		direction = nil
@@ -194,6 +213,7 @@ class Player
 
 
 	def move_right
+		@idle = @right_idle
 		@action = @right
 		stop = false
 		direction = nil
